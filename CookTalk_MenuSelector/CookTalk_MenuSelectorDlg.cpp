@@ -49,6 +49,8 @@ END_MESSAGE_MAP()
 
 CCookTalk_MenuSelectorDlg::CCookTalk_MenuSelectorDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CCookTalk_MenuSelectorDlg::IDD, pParent)
+	, con_Radio(0)
+	, Type_Radio(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -56,6 +58,9 @@ CCookTalk_MenuSelectorDlg::CCookTalk_MenuSelectorDlg(CWnd* pParent /*=NULL*/)
 void CCookTalk_MenuSelectorDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Radio(pDX, IDC_RADIO1, con_Radio);
+	DDX_Radio(pDX, IDC_RADIO4, Type_Radio);
+	DDX_Control(pDX, IDC_LIST3, m_MaterialList);
 }
 
 BEGIN_MESSAGE_MAP(CCookTalk_MenuSelectorDlg, CDialogEx)
@@ -67,7 +72,9 @@ BEGIN_MESSAGE_MAP(CCookTalk_MenuSelectorDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK3, &CCookTalk_MenuSelectorDlg::OnBnClickedCheck3)
 	ON_BN_CLICKED(IDC_CHECK1, &CCookTalk_MenuSelectorDlg::OnBnClickedCheck1)
 	ON_BN_CLICKED(IDC_CHECK2, &CCookTalk_MenuSelectorDlg::OnBnClickedCheck2)
-//	ON_BN_CLICKED(IDC_STATIC3, &CCookTalk_MenuSelectorDlg::OnBnClickedStatic3)
+	ON_CONTROL_RANGE(BN_CLICKED,IDC_RADIO1,IDC_RADIO3,CCookTalk_MenuSelectorDlg::SetRadioStatus1)
+	ON_CONTROL_RANGE(BN_CLICKED,IDC_RADIO4,IDC_RADIO5,CCookTalk_MenuSelectorDlg::SetRadioStatus2)
+	ON_NOTIFY(NM_CLICK, IDC_LIST3, &CCookTalk_MenuSelectorDlg::OnNMClickList3)
 END_MESSAGE_MAP()
 
 
@@ -103,6 +110,66 @@ BOOL CCookTalk_MenuSelectorDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	((CButton*)GetDlgItem(IDC_RADIO1))->SetCheck(false);
+	((CButton*)GetDlgItem(IDC_RADIO4))->SetCheck(false);
+
+	m_MaterialList.InsertItem(0,TEXT("가지"));
+	m_MaterialList.InsertItem(0,TEXT("감자"));
+	m_MaterialList.InsertItem(0,TEXT("계피가루"));
+	m_MaterialList.InsertItem(0,TEXT("고구마"));
+	m_MaterialList.InsertItem(0,TEXT("꿀"));
+	m_MaterialList.InsertItem(0,TEXT("냉동피자"));
+	m_MaterialList.InsertItem(0,TEXT("다진 돼지고기"));
+	m_MaterialList.InsertItem(0,TEXT("다진 마늘"));
+	m_MaterialList.InsertItem(0,TEXT("다진 쇠고기"));
+	m_MaterialList.InsertItem(0,TEXT("다진 실파"));
+	m_MaterialList.InsertItem(0,TEXT("달걀"));
+	m_MaterialList.InsertItem(0,TEXT("닭다리"));
+	m_MaterialList.InsertItem(0,TEXT("대추"));
+	m_MaterialList.InsertItem(0,TEXT("돼지고기 립"));
+	m_MaterialList.InsertItem(0,TEXT("또띠아"));
+	m_MaterialList.InsertItem(0,TEXT("멥쌀"));
+	m_MaterialList.InsertItem(0,TEXT("모짜렐라 치즈"));
+	m_MaterialList.InsertItem(0,TEXT("바닐라오일"));
+	m_MaterialList.InsertItem(0,TEXT("박력분"));
+	m_MaterialList.InsertItem(0,TEXT("밤"));
+	m_MaterialList.InsertItem(0,TEXT("버터"));
+	m_MaterialList.InsertItem(0,TEXT("베이글"));
+	m_MaterialList.InsertItem(0,TEXT("베이컨"));
+	m_MaterialList.InsertItem(0,TEXT("베이킹 소다"));
+	m_MaterialList.InsertItem(0,TEXT("베이킹 파우더"));
+	m_MaterialList.InsertItem(0,TEXT("블랙 올리브"));
+	m_MaterialList.InsertItem(0,TEXT("생닭"));
+	m_MaterialList.InsertItem(0,TEXT("생크림"));
+	m_MaterialList.InsertItem(0,TEXT("스파게티면"));
+	m_MaterialList.InsertItem(0,TEXT("식빵"));
+	m_MaterialList.InsertItem(0,TEXT("식은밥"));
+	m_MaterialList.InsertItem(0,TEXT("양송이"));
+	m_MaterialList.InsertItem(0,TEXT("양파"));
+	m_MaterialList.InsertItem(0,TEXT("오레가노"));
+	m_MaterialList.InsertItem(0,TEXT("올리고당"));
+	m_MaterialList.InsertItem(0,TEXT("우스터 소스"));
+	m_MaterialList.InsertItem(0,TEXT("월계수잎"));
+	m_MaterialList.InsertItem(0,TEXT("육수"));
+	m_MaterialList.InsertItem(0,TEXT("은행"));
+	m_MaterialList.InsertItem(0,TEXT("잣"));
+	m_MaterialList.InsertItem(0,TEXT("적포도주"));
+	m_MaterialList.InsertItem(0,TEXT("중력분"));
+	m_MaterialList.InsertItem(0,TEXT("찹쌀"));
+	m_MaterialList.InsertItem(0,TEXT("청피망"));
+	m_MaterialList.InsertItem(0,TEXT("초코칩"));
+	m_MaterialList.InsertItem(0,TEXT("콩"));
+	m_MaterialList.InsertItem(0,TEXT("크림치즈"));
+	m_MaterialList.InsertItem(0,TEXT("토마토 페이스트"));
+	m_MaterialList.InsertItem(0,TEXT("통삽겹살"));
+	m_MaterialList.InsertItem(0,TEXT("파마산 치즈"));
+	m_MaterialList.InsertItem(0,TEXT("파슬리 가루"));
+	m_MaterialList.InsertItem(0,TEXT("피자 빵가루"));
+	m_MaterialList.InsertItem(0,TEXT("피자소스"));
+	m_MaterialList.InsertItem(0,TEXT("햄"));
+	m_MaterialList.InsertItem(0,TEXT("홍피망"));
+	//ListView_SetItem((HWND)GetDlgItem(IDC_LIST3),"피자");
+	//IDC_LIST3->
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -197,7 +264,14 @@ void CheckGroup(INT CheckID, INT GroupID, CWnd* pWndParent)
         {
             pWnd->GetWindowRect(rcChild);
             if (rcChild.IntersectRect(rcGroup, rcChild))
+			{
                 pWnd->EnableWindow(bCheck);
+				if(bCheck==false)
+				{
+					((CButton*)pWnd)->SetCheck(false);
+					
+				}
+			}
         }
         pWnd = pWnd->GetWindow(GW_HWNDNEXT);
     }
@@ -223,8 +297,60 @@ void CCookTalk_MenuSelectorDlg::OnBnClickedCheck3()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
-//void CCookTalk_MenuSelectorDlg::OnBnClickedStatic3()
-//{
-//	CheckGroup(IDC_CHECK3,IDC_STATIC3 , this);
-//	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-//}
+
+void CCookTalk_MenuSelectorDlg::SetRadioStatus1(UINT value)
+{
+	UpdateData(TRUE);
+	
+	switch(con_Radio)
+	{
+		case 0:
+			//CEdit* p=(CEdit*)GetDlgItem(IDC_EDIT2);
+			//p->SetWindowTextW("법량접시");
+			SetDlgItemTextW(IDC_EDIT2,TEXT("법량접시"));
+			//((CButton*)GetDlgItem(IDC_RADIO1))->EnableWindow(false);
+			//EnableWindow(IDC_RADIO1,1);
+			break;
+		case 1:
+			SetDlgItemTextW(IDC_EDIT2,TEXT("석쇠"));
+			break;
+		case 2:
+			SetDlgItemTextW(IDC_EDIT2,TEXT("구이전용팬"));
+			break;
+		default:
+			SetDlgItemTextW(IDC_EDIT2,TEXT("없음"));
+			break;
+	}
+}
+void CCookTalk_MenuSelectorDlg::SetRadioStatus2(UINT value)
+{
+	UpdateData(TRUE);
+	
+	switch(Type_Radio)
+	{
+		case 0:
+			//CEdit* p=(CEdit*)GetDlgItem(IDC_EDIT2);
+			//p->SetWindowTextW("법량접시");
+			SetDlgItemTextW(IDC_EDIT2,TEXT("오븐"));
+			//((CButton*)GetDlgItem(IDC_RADIO1))->EnableWindow(false);
+			//EnableWindow(IDC_RADIO1,1);
+			break;
+		case 1:
+			SetDlgItemTextW(IDC_EDIT2,TEXT("토스트"));
+			break;
+		default:
+			SetDlgItemTextW(IDC_EDIT2,TEXT("없음"));
+			break;
+	}
+}
+
+void CCookTalk_MenuSelectorDlg::OnNMClickList3(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	NM_LISTVIEW* pNMView = (NM_LISTVIEW*)pNMHDR;
+	int index = pNMView->iItem;
+
+	SetDlgItemTextW(IDC_EDIT2,(LPCTSTR)index);
+	*pResult = 0;
+}

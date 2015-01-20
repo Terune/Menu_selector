@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "afxcmn.h"
 
 
 // CCookTalk_MenuSelectorDlg 대화 상자
@@ -22,7 +23,7 @@ public:
 // 구현입니다.
 protected:
 	HICON m_hIcon;
-
+	//void CheckGroup(INT CheckID, INT GroupID, CWnd* pWndParent);
 	// 생성된 메시지 맵 함수
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
@@ -35,5 +36,13 @@ public:
 	afx_msg void OnBnClickedCheck3();
 	afx_msg void OnBnClickedCheck1();
 	afx_msg void OnBnClickedCheck2();
-//	afx_msg void OnBnClickedStatic3();
+	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedCheck4();
+	afx_msg void OnBnClickedRadio1();
+	afx_msg void SetRadioStatus1(UINT value);//con control
+	afx_msg void SetRadioStatus2(UINT value);//type control
+	int con_Radio;
+	int Type_Radio;
+	CListCtrl m_MaterialList;
+	afx_msg void OnNMClickList3(NMHDR *pNMHDR, LRESULT *pResult);
 };
