@@ -43,6 +43,7 @@ public:
 	afx_msg void SetRadioStatus2(UINT value);//type control
 	int con_Radio;
 	int Type_Radio;
+
 	CListCtrl m_MaterialList;
 	afx_msg void OnNMClickList3(NMHDR *pNMHDR, LRESULT *pResult);
 };

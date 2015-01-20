@@ -51,4 +51,6 @@
 #endif
 #endif
 
-
+extern int material_point[25];
+extern int type_point[25];
+extern int con_point[25];

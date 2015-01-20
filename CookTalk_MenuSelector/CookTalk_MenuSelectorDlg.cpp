@@ -11,21 +11,28 @@
 #define new DEBUG_NEW
 #endif
 
+#define MENU_NUM 25
+#define MATERIAL_NUM 55
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
+int material_point[25];
+int type_point[25];
+int con_point[25];
 
+BOOL __ClipCopy(char *txt);
 class CAboutDlg : public CDialogEx
 {
 public:
 	CAboutDlg();
 
-// 대화 상자 데이터입니다.
+	// 대화 상자 데이터입니다.
 	enum { IDD = IDD_ABOUTBOX };
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
-// 구현입니다.
+
+	// 구현입니다.
 protected:
 	DECLARE_MESSAGE_MAP()
 };
@@ -78,6 +85,7 @@ BEGIN_MESSAGE_MAP(CCookTalk_MenuSelectorDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
+
 // CCookTalk_MenuSelectorDlg 메시지 처리기
 
 BOOL CCookTalk_MenuSelectorDlg::OnInitDialog()
@@ -112,7 +120,7 @@ BOOL CCookTalk_MenuSelectorDlg::OnInitDialog()
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	((CButton*)GetDlgItem(IDC_RADIO1))->SetCheck(false);
 	((CButton*)GetDlgItem(IDC_RADIO4))->SetCheck(false);
-
+	m_MaterialList.SetExtendedStyle( LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT );
 	m_MaterialList.InsertItem(0,TEXT("가지"));
 	m_MaterialList.InsertItem(0,TEXT("감자"));
 	m_MaterialList.InsertItem(0,TEXT("계피가루"));
@@ -168,8 +176,13 @@ BOOL CCookTalk_MenuSelectorDlg::OnInitDialog()
 	m_MaterialList.InsertItem(0,TEXT("피자소스"));
 	m_MaterialList.InsertItem(0,TEXT("햄"));
 	m_MaterialList.InsertItem(0,TEXT("홍피망"));
-	//ListView_SetItem((HWND)GetDlgItem(IDC_LIST3),"피자");
-	//IDC_LIST3->
+
+	for(int i=0;i<MENU_NUM;i++)
+	{
+		material_point[i]=0;
+		type_point[i]=0;
+		con_point[i]=0;
+	}
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -238,8 +251,64 @@ void CCookTalk_MenuSelectorDlg::OnEnChangeEdit1()
 
 void CCookTalk_MenuSelectorDlg::OnBnClickedOk()
 {
+	int highest=0;
+	int recommenu[MENU_NUM];
+	int high_Num=0;
+	CString Menu[MENU_NUM]={L"감자 그라탱",L"군고구마",L"냉동피자",L"누룽지",L"닭다리",L"또띠아 피자",L"롤케이크",L"립 바비큐",L"스콘",L"스폰지 케이크",L"약식",L"영양밥",L"오븐 스파게티",L"초코칩 쿠키",L"치즈 케이크",L"통감자",L"통닭",L"통삼겹살",L"피자",L"햄버그 스테이크",L"마늘빵",L"베이글",L"식빵",L"피자토스트",L"허니브레드"};
+	CString results;
+	for(int i=0;i<MENU_NUM;i++)
+	{
+		if(highest<type_point[i]+con_point[i]+material_point[i])
+		{
+			highest=type_point[i]+con_point[i]+material_point[i];
+		}
+	}
+	
+	for(int i=0;i<MENU_NUM;i++)
+	{
+		if(highest==type_point[i]+con_point[i]+material_point[i])
+		{
+			recommenu[high_Num++]=i;
+		}
+	}
+
+	if(high_Num>0)
+	{
+		for(int i=0;i<high_Num-1;i++)
+		{
+			results+=Menu[recommenu[i]]+L", ";
+		}
+		results+=Menu[recommenu[high_Num-1]];
+		
+		
+
+	
+	}
+	else
+		results=L"맞는 조건의 메뉴가 없습니다";
+	SetDlgItemTextW(IDC_EDIT2,results);
+	//char* ss = (LPSTR)(LPCSTR)results;
+	//char* ss = new char[results.GetLength()+1];
+	wchar_t* wchar_str;     //첫번째 단계(CString to wchar_t*)를 위한 변수
+	char*    char_str;      //char* 형의 변수
+	int      char_str_len;  //char* 형 변수의 길이를 위한 변수
+
+	//1. CString to wchar_t* conversion
+	wchar_str = results.GetBuffer(results.GetLength());
+
+	//2. wchar_t* to char* conversion
+	//char* 형에 대한길이를 구함
+	char_str_len = WideCharToMultiByte(CP_ACP, 0, wchar_str, -1, NULL, 0, NULL, NULL);
+	char_str = new char[char_str_len];  //메모리 할당
+	//wchar_t* to char* conversion
+	WideCharToMultiByte(CP_ACP, 0, wchar_str, -1, char_str, char_str_len, 0,0);  
+
+	if(__ClipCopy(char_str)&&high_Num>0)
+	{
+		AfxMessageBox(TEXT("추천 메뉴가 클립보드에 복사되었습니다"));
+	}
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	CDialogEx::OnOK();
+	//CDialogEx::OnOK();
 }
 
 
@@ -247,40 +316,62 @@ void CCookTalk_MenuSelectorDlg::OnBnClickedOk()
 
 void CheckGroup(INT CheckID, INT GroupID, CWnd* pWndParent)
 {
-    // 일단 버튼의 첵크 상태를 읽ㅇ온다.
-    BOOL bCheck = pWndParent->IsDlgButtonChecked(CheckID);
-    
-    CRect rcGroup, rcChild;
-    
-    // 그룹박스의 영역 정보를 읽어온다.
-    pWndParent->GetDlgItem(GroupID)->GetWindowRect(rcGroup);
-    
-    // 현재 다이알로그의 차일드 윈도우중 첫번째 것을 가져온다.
-    CWnd* pWnd = pWndParent->GetWindow(GW_CHILD);
-    while (pWnd)
-    {
-        // 해당 그룹과, 버튼을 제외한 차일드 윈도우.
-        if(pWnd->GetDlgCtrlID() != CheckID && pWnd->GetDlgCtrlID() != GroupID)
-        {
-            pWnd->GetWindowRect(rcChild);
-            if (rcChild.IntersectRect(rcGroup, rcChild))
+	// 일단 버튼의 첵크 상태를 읽ㅇ온다.
+	BOOL bCheck = pWndParent->IsDlgButtonChecked(CheckID);
+
+	if(bCheck==false)
+	{
+		switch (CheckID)
+		{
+		case 1001:
+			for(int i=0;i<MENU_NUM;i++)
+				con_point[i]=0;
+			break;
+		case 1003:
+			for(int i=0;i<MENU_NUM;i++)
+				type_point[i]=0;
+			break;
+		case 1008:
+			
+			for(int i=0;i<MENU_NUM;i++)
+				material_point[i]=0;
+			break;
+		default:
+			break;
+		}
+	}
+
+	CRect rcGroup, rcChild;
+
+	// 그룹박스의 영역 정보를 읽어온다.
+	pWndParent->GetDlgItem(GroupID)->GetWindowRect(rcGroup);
+
+	// 현재 다이알로그의 차일드 윈도우중 첫번째 것을 가져온다.
+	CWnd* pWnd = pWndParent->GetWindow(GW_CHILD);
+	while (pWnd)
+	{
+		// 해당 그룹과, 버튼을 제외한 차일드 윈도우.
+		if(pWnd->GetDlgCtrlID() != CheckID && pWnd->GetDlgCtrlID() != GroupID)
+		{
+			pWnd->GetWindowRect(rcChild);
+			if (rcChild.IntersectRect(rcGroup, rcChild))
 			{
-                pWnd->EnableWindow(bCheck);
+				pWnd->EnableWindow(bCheck);
 				if(bCheck==false)
 				{
 					((CButton*)pWnd)->SetCheck(false);
-					
+
 				}
 			}
-        }
-        pWnd = pWnd->GetWindow(GW_HWNDNEXT);
-    }
+		}
+		pWnd = pWnd->GetWindow(GW_HWNDNEXT);
+	}
 }
 
 
 void CCookTalk_MenuSelectorDlg::OnBnClickedCheck1()
 {
-	 CheckGroup(IDC_CHECK1,IDC_STATIC1 , this);
+	CheckGroup(IDC_CHECK1,IDC_STATIC1 , this);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
@@ -294,6 +385,11 @@ void CCookTalk_MenuSelectorDlg::OnBnClickedCheck2()
 void CCookTalk_MenuSelectorDlg::OnBnClickedCheck3()
 {
 	CheckGroup(IDC_CHECK3,IDC_STATIC3 , this);
+	if(this->IsDlgButtonChecked(IDC_CHECK3)==false)
+	{
+		for(int i=0;i<MATERIAL_NUM;i++)
+			m_MaterialList.SetCheck(i,false);
+	}
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
@@ -301,46 +397,103 @@ void CCookTalk_MenuSelectorDlg::OnBnClickedCheck3()
 void CCookTalk_MenuSelectorDlg::SetRadioStatus1(UINT value)
 {
 	UpdateData(TRUE);
-	
+
 	switch(con_Radio)
 	{
-		case 0:
-			//CEdit* p=(CEdit*)GetDlgItem(IDC_EDIT2);
-			//p->SetWindowTextW("법량접시");
-			SetDlgItemTextW(IDC_EDIT2,TEXT("법량접시"));
-			//((CButton*)GetDlgItem(IDC_RADIO1))->EnableWindow(false);
-			//EnableWindow(IDC_RADIO1,1);
-			break;
-		case 1:
-			SetDlgItemTextW(IDC_EDIT2,TEXT("석쇠"));
-			break;
-		case 2:
-			SetDlgItemTextW(IDC_EDIT2,TEXT("구이전용팬"));
-			break;
-		default:
-			SetDlgItemTextW(IDC_EDIT2,TEXT("없음"));
-			break;
+	case 0:
+		//CEdit* p=(CEdit*)GetDlgItem(IDC_EDIT2);
+		//p->SetWindowTextW("법량접시");
+		//SetDlgItemTextW(IDC_EDIT2,TEXT("법량접시"));
+
+		for(int i=0; i<4;i++)
+			con_point[i]=100;
+		for(int i=4; i<6;i++)
+			con_point[i]=-300;
+		for(int i=6; i<18;i++)
+			con_point[i]=100;
+		for(int i=18; i<20;i++)
+			con_point[i]=-300;
+
+		con_point[20]=100;//마늘빵
+		con_point[23]=100;//피자토스트
+		con_point[24]=100;//허니브레드
+		//점수 추가
+		//((CButton*)GetDlgItem(IDC_RADIO1))->EnableWindow(false);
+		//EnableWindow(IDC_RADIO1,1);
+		break;
+	case 1:
+		//SetDlgItemTextW(IDC_EDIT2,TEXT("석쇠"));
+
+		for(int i=0; i<4;i++)
+			con_point[i]=100;
+		for(int i=4; i<7;i++)
+			con_point[i]=-200;
+
+		con_point[7]=100;
+		con_point[8]=-300;
+		for(int i=9; i<13;i++)
+			con_point[i]=100;
+		con_point[13]=-300;
+		for(int i=14; i<18;i++)
+			con_point[i]=100;
+		for(int i=18; i<25;i++)
+			con_point[i]=-300;
+
+		break;
+	case 2:
+		//SetDlgItemTextW(IDC_EDIT2,TEXT("구이전용팬"));
+
+		for(int i=0; i<3;i++)
+			con_point[i]=-300;
+		for(int i=3; i<6;i++)
+			con_point[i]=100;
+		for(int i=6; i<13;i++)
+			con_point[i]=-300;
+
+		con_point[13]=100;
+
+		for(int i=14; i<18;i++)
+			con_point[i]=0;
+		con_point[18]=100;
+		con_point[19]=100;
+		con_point[20]=-300;
+		con_point[21]=100;
+		con_point[22]=100;
+		con_point[23]=-300;
+		con_point[24]=-300;
+		break;
+	default:
+		SetDlgItemTextW(IDC_EDIT2,TEXT("없음"));
+		break;
 	}
 }
 void CCookTalk_MenuSelectorDlg::SetRadioStatus2(UINT value)
 {
 	UpdateData(TRUE);
-	
+
 	switch(Type_Radio)
 	{
-		case 0:
-			//CEdit* p=(CEdit*)GetDlgItem(IDC_EDIT2);
-			//p->SetWindowTextW("법량접시");
-			SetDlgItemTextW(IDC_EDIT2,TEXT("오븐"));
-			//((CButton*)GetDlgItem(IDC_RADIO1))->EnableWindow(false);
-			//EnableWindow(IDC_RADIO1,1);
-			break;
-		case 1:
-			SetDlgItemTextW(IDC_EDIT2,TEXT("토스트"));
-			break;
-		default:
-			SetDlgItemTextW(IDC_EDIT2,TEXT("없음"));
-			break;
+	case 0:
+		//CEdit* p=(CEdit*)GetDlgItem(IDC_EDIT2);
+		//p->SetWindowTextW("법량접시");
+		//SetDlgItemTextW(IDC_EDIT2,TEXT("오븐"));
+		//((CButton*)GetDlgItem(IDC_RADIO1))->EnableWindow(false);
+		//EnableWindow(IDC_RADIO1,1);
+		for(int i=0; i<20;i++)
+			type_point[i]=100;
+		for(int i=20; i<25;i++)
+			type_point[i]=-300;
+		break;
+	case 1:
+		//SetDlgItemTextW(IDC_EDIT2,TEXT("토스트"));
+		for(int i=0; i<20;i++)
+			type_point[i]=-300;
+		for(int i=20; i<25;i++)
+			type_point[i]=100;
+		break;
+	default:
+		SetDlgItemTextW(IDC_EDIT2,TEXT("없음"));
+		break;
 	}
 }
 
@@ -351,6 +504,479 @@ void CCookTalk_MenuSelectorDlg::OnNMClickList3(NMHDR *pNMHDR, LRESULT *pResult)
 	NM_LISTVIEW* pNMView = (NM_LISTVIEW*)pNMHDR;
 	int index = pNMView->iItem;
 
-	SetDlgItemTextW(IDC_EDIT2,(LPCTSTR)index);
-	*pResult = 0;
+	//SetDlgItemTextW(IDC_EDIT2,(LPCTSTR)index);
+	LVHITTESTINFO oInfo;
+	oInfo.pt = pNMView->ptAction;
+	m_MaterialList.HitTest(&oInfo);
+
+	if(oInfo.flags==LVHT_ONITEMSTATEICON)
+	{
+		SetDlgItemTextW(IDC_EDIT2,(LPCTSTR)index);
+		if(m_MaterialList.GetCheck(index)==FALSE)
+		{
+
+			switch(index)
+			{
+			#pragma region materials
+			case 0://가지
+				material_point[12]+=10;
+				break;
+			case 1://감자
+				material_point[0]+=10;
+				material_point[15]+=10;
+				break;
+			case 2://계피가루
+				material_point[10]+=10;
+				break;
+			case 3://고구마
+				material_point[1]+=10;
+				break;
+			case 4://꿀
+				material_point[24]+=10;
+				break;
+			case 5://냉동피자
+				material_point[2]+=10;
+				break;
+			case 6://다진 돼지고기
+				material_point[19]+=10;
+				break;
+			case 7://다진 마늘
+				material_point[18]+=10;
+				material_point[19]+=10;
+				material_point[20]+=10;
+				break;
+			case 8://다진 쇠고기
+				material_point[18]+=10;
+				material_point[19]+=10;
+				break;
+			case 9://다진 실파
+				material_point[12]+=10;
+				break;
+			case 10://달걀
+				material_point[6]+=10;
+				material_point[8]+=10;
+				material_point[9]+=10;
+				material_point[13]+=10;
+				material_point[14]+=10;
+				material_point[19]+=10;
+				break;
+			case 11://닭다리
+				material_point[4]+=10;
+				break;
+			case 12://대추
+				material_point[10]+=10;
+				material_point[11]+=10;
+				break;
+			case 13://돼지고기 립
+				material_point[7]+=10;
+				break;
+			case 14://또띠아
+				material_point[5]+=10;
+				break;
+			case 15://멥쌀
+				material_point[11]+=10;
+				break;
+			case 16://모짜렐라 치즈
+				material_point[0]+=10;
+				material_point[5]+=10;
+				material_point[12]+=10;
+				material_point[18]+=10;
+				material_point[23]+=10;
+				break;
+			case 17://바닐라 오일
+				material_point[6]+=10;
+				material_point[9]+=10;
+				break;
+			case 18://박력분
+				material_point[6]+=10;
+				material_point[9]+=10;
+				material_point[13]+=10;
+				material_point[14]+=10;
+				break;
+			case 19://밤
+				material_point[10]+=10;
+				material_point[11]+=10;
+				break;
+			case 20://버터
+				material_point[20]+=10;
+				material_point[23]+=10;
+				material_point[24]+=10;
+			case 21://베이글
+				material_point[21]+=10;
+				break;
+			case 22://베이컨
+				material_point[0]+=10;
+				material_point[5]+=10;
+				material_point[18]+=10;
+				material_point[23]+=10;
+				break;
+			case 23://베이킹소다
+				material_point[13]+=10;
+				break;
+			case 24://베이킹파우더
+				material_point[8]+=10;
+				break;
+			case 25://블랙올리브
+				material_point[5]+=10;
+				material_point[18]+=10;
+				material_point[23]+=10;
+				break;
+			case 26://생닭
+				material_point[16]+=10;
+				break;
+			case 27://생크림
+				material_point[14]+=10;
+				break;
+			case 28://스파게티면
+				material_point[12]+=10;
+				break;
+			case 29://식빵
+				material_point[20]+=10;
+				material_point[22]+=10;
+				material_point[23]+=10;
+				material_point[24]+=10;
+				break;
+			case 30://식은밥
+				material_point[3]+=10;
+				break;
+			case 31://양송이
+				material_point[5]+=10;
+				material_point[18]+=10;
+				material_point[23]+=10;
+				break;
+			case 32://양파
+				material_point[0]+=10;
+				material_point[5]+=10;
+				material_point[18]+=10;
+				material_point[19]+=10;
+				material_point[23]+=10;
+				break;
+			case 33://오레가노
+				material_point[18]+=10;
+				break;
+			case 34://올리고당
+				//material_point[24]+=10;
+				break;
+			case 35://우스터소스
+				material_point[19]+=10;
+			case 36://월계수잎
+				material_point[18]+=10;
+				break;
+			case 37://육수
+				material_point[18]+=10;
+				material_point[19]+=10;
+				break;
+			case 38://은행
+				material_point[11]+=10;
+				break;
+			case 39://잣
+				material_point[10]+=10;
+				material_point[11]+=10;
+				break;
+			case 40://적포도주
+				material_point[19]+=10;
+				break;
+			case 41://중력분
+				material_point[8]+=10;
+				break;
+			case 42://찹쌀
+				material_point[10]+=10;
+				material_point[11]+=10;
+				break;
+			case 43://청피망
+				material_point[5]+=10;
+				material_point[18]+=10;
+				material_point[23]+=10;
+				break;
+			case 44://초코칩
+				material_point[13]+=10;
+				break;
+			case 45://콩
+				material_point[11]+=10;
+				break;
+			case 46://크림치즈
+				material_point[13]+=10;
+				break;
+			case 47://토마토 페이스트
+				material_point[18]+=10;
+				break;
+			case 48://통삽겹살
+				material_point[17]+=10;
+				break;
+			case 49://파마산치즈
+				material_point[12]+=10;
+				break;
+			case 50://파슬리 가루
+				material_point[20]+=10;
+			case 51://피자 빵가루
+				material_point[18]+=10;
+				material_point[19]+=10;
+				break;
+			case 52://피자소스
+				material_point[5]+=10;
+				break;
+			case 53://햄
+				material_point[5]+=10;
+				material_point[18]+=10;
+				material_point[23]+=10;
+				break;
+			case 54://홍피망
+				material_point[5]+=10;
+				material_point[18]+=10;
+				material_point[23]+=10;
+				break;
+			default:
+				break;
+			#pragma endregion add_point
+			}
+
+		}
+		else
+		{
+			switch(index)
+			{
+			#pragma region material_not
+			case 0://가지
+				material_point[12]-=10;
+				break;
+			case 1://감자
+				material_point[0]-=10;
+				material_point[15]-=10;
+				break;
+			case 2://계피가루
+				material_point[10]-=10;
+				break;
+			case 3://고구마
+				material_point[1]-=10;
+				break;
+			case 4://꿀
+				material_point[24]-=10;
+				break;
+			case 5://냉동피자
+				material_point[2]-=10;
+				break;
+			case 6://다진 돼지고기
+				material_point[19]-=10;
+				break;
+			case 7://다진 마늘
+				material_point[18]-=10;
+				material_point[19]-=10;
+				material_point[20]-=10;
+				break;
+			case 8://다진 쇠고기
+				material_point[18]-=10;
+				material_point[19]-=10;
+				break;
+			case 9://다진 실파
+				material_point[12]-=10;
+				break;
+			case 10://달걀
+				material_point[6]-=10;
+				material_point[8]-=10;
+				material_point[9]-=10;
+				material_point[13]-=10;
+				material_point[14]-=10;
+				material_point[19]-=10;
+				break;
+			case 11://닭다리
+				material_point[4]-=10;
+				break;
+			case 12://대추
+				material_point[10]-=10;
+				material_point[11]-=10;
+				break;
+			case 13://돼지고기 립
+				material_point[7]-=10;
+				break;
+			case 14://또띠아
+				material_point[5]-=10;
+				break;
+			case 15://멥쌀
+				material_point[11]-=10;
+				break;
+			case 16://모짜렐라 치즈
+				material_point[0]-=10;
+				material_point[5]-=10;
+				material_point[12]-=10;
+				material_point[18]-=10;
+				material_point[23]-=10;
+				break;
+			case 17://바닐라 오일
+				material_point[6]-=10;
+				material_point[9]-=10;
+				break;
+			case 18://박력분
+				material_point[6]-=10;
+				material_point[9]-=10;
+				material_point[13]-=10;
+				material_point[14]-=10;
+				break;
+			case 19://밤
+				material_point[10]-=10;
+				material_point[11]-=10;
+				break;
+			case 20://버터
+				material_point[20]-=10;
+				material_point[23]-=10;
+				material_point[24]-=10;
+			case 21://베이글
+				material_point[21]-=10;
+				break;
+			case 22://베이컨
+				material_point[0]-=10;
+				material_point[5]-=10;
+				material_point[18]-=10;
+				material_point[23]-=10;
+				break;
+			case 23://베이킹소다
+				material_point[13]-=10;
+				break;
+			case 24://베이킹파우더
+				material_point[8]-=10;
+				break;
+			case 25://블랙올리브
+				material_point[5]-=10;
+				material_point[18]-=10;
+				material_point[23]-=10;
+				break;
+			case 26://생닭
+				material_point[16]-=10;
+				break;
+			case 27://생크림
+				material_point[14]-=10;
+				break;
+			case 28://스파게티면
+				material_point[12]-=10;
+				break;
+			case 29://식빵
+				material_point[20]-=10;
+				material_point[22]-=10;
+				material_point[23]-=10;
+				material_point[24]-=10;
+				break;
+			case 30://식은밥
+				material_point[3]-=10;
+				break;
+			case 31://양송이
+				material_point[5]-=10;
+				material_point[18]-=10;
+				material_point[23]-=10;
+				break;
+			case 32://양파
+				material_point[0]-=10;
+				material_point[5]-=10;
+				material_point[18]-=10;
+				material_point[19]-=10;
+				material_point[23]-=10;
+				break;
+			case 33://오레가노
+				material_point[18]-=10;
+				break;
+			case 34://올리고당
+				//material_point[24]-=10;
+				break;
+			case 35://우스터소스
+				material_point[19]-=10;
+			case 36://월계수잎
+				material_point[18]-=10;
+				break;
+			case 37://육수
+				material_point[18]-=10;
+				material_point[19]-=10;
+				break;
+			case 38://은행
+				material_point[11]-=10;
+				break;
+			case 39://잣
+				material_point[10]-=10;
+				material_point[11]-=10;
+				break;
+			case 40://적포도주
+				material_point[19]-=10;
+				break;
+			case 41://중력분
+				material_point[8]-=10;
+				break;
+			case 42://찹쌀
+				material_point[10]-=10;
+				material_point[11]-=10;
+				break;
+			case 43://청피망
+				material_point[5]-=10;
+				material_point[18]-=10;
+				material_point[23]-=10;
+				break;
+			case 44://초코칩
+				material_point[13]-=10;
+				break;
+			case 45://콩
+				material_point[11]-=10;
+				break;
+			case 46://크림치즈
+				material_point[13]-=10;
+				break;
+			case 47://토마토 페이스트
+				material_point[18]-=10;
+				break;
+			case 48://통삽겹살
+				material_point[17]-=10;
+				break;
+			case 49://파마산치즈
+				material_point[12]-=10;
+				break;
+			case 50://파슬리 가루
+				material_point[20]-=10;
+			case 51://피자 빵가루
+				material_point[18]-=10;
+				material_point[19]-=10;
+				break;
+			case 52://피자소스
+				material_point[5]-=10;
+				break;
+			case 53://햄
+				material_point[5]-=10;
+				material_point[18]-=10;
+				material_point[23]-=10;
+				break;
+			case 54://홍피망
+				material_point[5]-=10;
+				material_point[18]-=10;
+				material_point[23]-=10;
+				break;
+			default:
+				break;
+			#pragma endregion minus
+			}
+		}
+
+
+		*pResult = 0;
+	}
 }
+BOOL __ClipCopy(char *txt)
+{
+ HGLOBAL hglbCopy;
+ char* lptstrCopy; 
+ 
+ if (!::OpenClipboard(AfxGetMainWnd()->GetSafeHwnd())) 
+  return FALSE; 
+ EmptyClipboard();  
+ 
+ hglbCopy = GlobalAlloc(GMEM_MOVEABLE, strlen(txt)+1);
+ if (hglbCopy == NULL) 
+ {
+  CloseClipboard(); 
+  return FALSE; 
+ } 
+ lptstrCopy =(char*)GlobalLock(hglbCopy); 
+ memcpy(lptstrCopy, txt, strlen(txt)+1); 
+ //lptstrCopy[strlen(txt)] = 0;
+ GlobalUnlock(hglbCopy); 
+ 
+ 
+ SetClipboardData(CF_TEXT, hglbCopy); 
+ 
+ CloseClipboard();  
+ return TRUE;
+ 
+} 
