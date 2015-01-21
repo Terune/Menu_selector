@@ -90,6 +90,11 @@ END_MESSAGE_MAP()
 
 BOOL CCookTalk_MenuSelectorDlg::OnInitDialog()
 {
+		//CString tabOne = _T("요리검색");
+	//CString tabTwo = _T("레시피 검색");
+
+	//m_MainTab.InsertItem(1,tabOne);
+	//m_MainTab.InsertItem(2,tabTwo);
 	CDialogEx::OnInitDialog();
 
 	// 시스템 메뉴에 "정보..." 메뉴 항목을 추가합니다.

@@ -5,7 +5,8 @@
 #include "stdafx.h"
 #include "CookTalk_MenuSelector.h"
 #include "CookTalk_MenuSelectorDlg.h"
-
+#include "First.h"
+//#include "FirstDlg.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -70,7 +71,9 @@ BOOL CCookTalk_MenuSelectorApp::InitInstance()
 	// 적절한 내용으로 수정해야 합니다.
 	SetRegistryKey(_T("로컬 응용 프로그램 마법사에서 생성된 응용 프로그램"));
 
-	CCookTalk_MenuSelectorDlg dlg;
+	//CCookTalk_MenuSelectorDlg dlg;
+	CFirst dlg;
+
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
