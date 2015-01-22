@@ -23,8 +23,12 @@ public:
 	enum { IDD = IDD_DIALOG1 };
 
 protected:
+	HICON m_hIcon;
+	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
+	afx_msg void OnPaint();
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 	virtual BOOL OnInitDialog();
+	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
 	CTabCtrl m_MainTab;
