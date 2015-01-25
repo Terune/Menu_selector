@@ -259,8 +259,18 @@ void CCookTalk_MenuSelectorDlg::OnEnChangeEdit1()
 void CCookTalk_MenuSelectorDlg::OnBnClickedOk()
 {
 	int highest=0;
-	int recommenu[MENU_NUM];
+	int recommenu[MENU_NUM]={};
 	int high_Num=0;
+
+	if(((CButton *)GetDlgItem(IDC_CHECK3))->GetCheck() == BST_CHECKED||((CButton *)GetDlgItem(IDC_CHECK5))->GetCheck() == BST_CHECKED)
+	{
+		for(int i=0;i<MENU_NUM;i++)
+		{
+			if(material_point[i]<=0)
+				material_point[i]-=300;
+		}
+	}
+
 	CString Menu[MENU_NUM]={L"감자 그라탱",L"군고구마",L"냉동피자",L"누룽지",L"닭다리",L"또띠아 피자",L"롤케이크",L"립 바비큐",L"스콘",L"스폰지 케이크",L"약식",L"영양밥",L"오븐 스파게티",L"초코칩 쿠키",L"치즈 케이크",L"통감자",L"통닭",L"통삼겹살",L"피자",L"햄버그 스테이크",L"마늘빵",L"베이글",L"식빵",L"피자토스트",L"허니브레드"};
 	CString results;
 	for(int i=0;i<MENU_NUM;i++)
@@ -313,6 +323,14 @@ void CCookTalk_MenuSelectorDlg::OnBnClickedOk()
 	if(__ClipCopy(char_str)&&high_Num>0)
 	{
 		AfxMessageBox(TEXT("추천 메뉴가 클립보드에 복사되었습니다"));
+	}
+	if(((CButton *)GetDlgItem(IDC_CHECK1))->GetCheck() == BST_CHECKED||((CButton *)GetDlgItem(IDC_CHECK1))->GetCheck() == BST_CHECKED)
+	{
+		for(int i=0;i<MENU_NUM;i++)
+		{
+			if(material_point[i]<=0)
+				material_point[i]+=300;
+		}
 	}
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	//CDialogEx::OnOK();
