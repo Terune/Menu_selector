@@ -324,7 +324,7 @@ void CCookTalk_MenuSelectorDlg::OnBnClickedOk()
 	{
 		AfxMessageBox(TEXT("추천 메뉴가 클립보드에 복사되었습니다"));
 	}
-	if(((CButton *)GetDlgItem(IDC_CHECK1))->GetCheck() == BST_CHECKED||((CButton *)GetDlgItem(IDC_CHECK1))->GetCheck() == BST_CHECKED)
+	if(((CButton *)GetDlgItem(IDC_CHECK3))->GetCheck() == BST_CHECKED||((CButton *)GetDlgItem(IDC_CHECK5))->GetCheck() == BST_CHECKED)
 	{
 		for(int i=0;i<MENU_NUM;i++)
 		{
@@ -471,7 +471,7 @@ void CCookTalk_MenuSelectorDlg::OnBnClickedCheck5()
 		for(int i = 0; i< nCount;i++) 
 			ListView_SetCheckState(tmp->GetSafeHwnd(),i,FALSE);
 		for(int i=0;i<MENU_NUM;i++)
-				material_point[i]=0;
+				material_point[i]=10;
 	} else { 
 		GetDlgItem(IDC_CHECK3)->EnableWindow(TRUE); 
 	} 
@@ -1110,13 +1110,16 @@ void CCookTalk_MenuSelectorDlg::OnNMClickList3(NMHDR *pNMHDR, LRESULT *pResult)
 		}
 		else if(((CButton *)GetDlgItem(IDC_CHECK5))->GetCheck() == BST_CHECKED)
 		{
+		
 			if(m_MaterialList.GetCheck(index)==FALSE)
 			{
-
+			/*	for(int i=0;i<MENU_NUM;i++)
+					if(i!=index)
+						material_point[i]+=10;*/
 				switch(index)
 				{
 #pragma region materials
-				case 0://가지
+				case 0://가지					
 					material_point[12]-=300;
 					break;
 				case 1://감자
@@ -1331,6 +1334,9 @@ void CCookTalk_MenuSelectorDlg::OnNMClickList3(NMHDR *pNMHDR, LRESULT *pResult)
 			}
 			else
 			{
+				//for(int i=0;i<MENU_NUM;i++)
+				//	if(i!=index)
+				//		material_point[i]-=10;
 				switch(index)
 				{
 #pragma region material_not
