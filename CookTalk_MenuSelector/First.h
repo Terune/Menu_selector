@@ -2,6 +2,7 @@
 #include "afxcmn.h"
 #include "CookTalk_MenuSelectorDlg.h"
 #include "Tab2.h"
+#include "Tab3.h"
 
 // CFirst 대화 상자입니다.
 
@@ -15,6 +16,7 @@ public:
 
 	CCookTalk_MenuSelectorDlg m_tab1;
 	CTab2 m_tab2;
+	CTab3 m_tab3;
 
 	CWnd* m_pwndShow;
 

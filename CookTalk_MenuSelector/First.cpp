@@ -80,9 +80,11 @@ BOOL CFirst::OnInitDialog()
 
 	CString tabOne = _T("요리검색");
 	CString tabTwo = _T("레시피 검색");
+	CString tabThree = _T("System Act Test");
 
 	m_MainTab.InsertItem(1,tabOne);
 	m_MainTab.InsertItem(2,tabTwo);
+	m_MainTab.InsertItem(3,tabThree);
 
 	CRect rect;
 	m_MainTab.GetClientRect(&rect);
@@ -91,6 +93,9 @@ BOOL CFirst::OnInitDialog()
 
 	m_tab2.Create(IDD_DIALOG2,&m_MainTab);
 	m_tab2.SetWindowPos(NULL,5, 25, rect.Width() -10, rect.Height() -30, SWP_NOZORDER);
+
+	m_tab3.Create(IDD_DIALOG3,&m_MainTab);
+	m_tab3.SetWindowPos(NULL,5, 25, rect.Width() -10, rect.Height() -30, SWP_NOZORDER);
 
 	m_pwndShow = &m_tab1;
 
@@ -175,6 +180,10 @@ void CFirst::OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult)
 		case 1:
 			m_tab2.ShowWindow(SW_SHOW);
 			m_pwndShow = &m_tab2;
+			break;
+		case 2:
+			m_tab3.ShowWindow(SW_SHOW);
+			m_pwndShow = &m_tab3;
 			break;
 	}
 	*pResult = 0;
