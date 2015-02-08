@@ -103,6 +103,8 @@ BEGIN_MESSAGE_MAP(CTab3, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK13, &CTab3::OnBnClickedCheck13)
 	ON_BN_CLICKED(IDC_BUTTON10, &CTab3::OnBnClickedButton10)
 	ON_BN_CLICKED(IDC_BUTTON9, &CTab3::OnBnClickedButton9)
+	ON_BN_CLICKED(IDC_BUTTON6, &CTab3::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON8, &CTab3::OnBnClickedButton8)
 END_MESSAGE_MAP()
 
 
@@ -136,6 +138,8 @@ void CTab3::OnBnClickedButton10()
 	if(pMainDialog.DoModal()==IDOK)
 	{
 		pMainDialog.GetUserData(Get_name);
+
+		SetDlgItemTextW(IDC_EDIT1,ComboName+TEXT(": ")+Get_name);
 		this->ShowWindow(SW_SHOW);
 	}
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
@@ -146,11 +150,27 @@ void CTab3::OnBnClickedButton9()
 	this->m_comboInformList.GetLBText(this->m_comboInformList.GetCurSel(), ComboName);
 	
 	CSelection pMainDialog;
+	CString Get_name;
 
 	pMainDialog.SetUserData(ComboName, 1);
 	if(pMainDialog.DoModal()==IDOK)
 	{
+		pMainDialog.GetUserData(Get_name);
+		SetDlgItemTextW(IDC_EDIT5,ComboName+TEXT(": ")+Get_name);
 		this->ShowWindow(SW_SHOW);
 	}
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void CTab3::OnBnClickedButton6()
+{
+	// 초기화 버튼 클릭 이벤트
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void CTab3::OnBnClickedButton8()
+{
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

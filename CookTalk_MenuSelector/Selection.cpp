@@ -147,7 +147,8 @@ void CSelection::GetUserData(CString &parm_name)
 	// 현재 멤버 변수가 가지고 있는 값을 매개변수에 복사해준다.
 	// 이 함수는 ModifyDlg를 생성한 부모 대화상자에서 호출할것이며
 	// DoModal이 끝난후에 사용할 것이다.
-	parm_name = List_Select;
+
+	parm_name = Matching_name(List_Select);
 	//parm_age = Sel_value;
 }
 BEGIN_MESSAGE_MAP(CSelection, CDialogEx)
@@ -309,55 +310,53 @@ CString CSelection::Matching_name(CString input)
 	else if(input=="홍피망")
 		return TEXT("red_peppers");
 	else if(input=="감자그라탱")
-	return TEXT("	gratin	");
+		return TEXT("gratin");
 	else if(input=="군고구마")
-return TEXT("	roasted_sweet_potato	");
+		return TEXT("roasted_sweet_potato");
 	else if(input=="냉동피자")
-return TEXT("	frozen_pizza	");
+		return TEXT("frozen_pizza");
 	else if(input=="누룽지")
-return TEXT("	nurungji	");
+		return TEXT("nurungji");
 	else if(input=="닭다리")
-		return TEXT("	drumstick	");
-
+		return TEXT("drumstick");
 	else if(input=="또띠아 피자")
-		return TEXT("	Tortilla	");
-return TEXT("	roll_cake	");
-return TEXT("	barbeque	");
-return TEXT("	garlic_bread	");
-return TEXT("	bagle	");
-return TEXT("	scorn	");
-return TEXT("	sponge_cake	");
-return TEXT("	bread	");
-return TEXT("	sweet_rice	");
-return TEXT("	deluxe_rice	");
-return TEXT("	spaghetti	");
-return TEXT("	chocochip	");
-return TEXT("	cheese_cake	");
-return TEXT("	potato	");
-return TEXT("	chicken	");
-return TEXT("	pork_belly	");
-return TEXT("	pizza	");
-return TEXT("	pizza_toast	");
-return TEXT("	hamburger	");
-return TEXT("	honey_bread	");
-
-	else if(input=="롤케이크");
-	else if(input=="립 바비큐");
-	else if(input=="마늘빵");
-	else if(input=="베이글");
-	else if(input=="스콘");
-	else if(input=="스폰지 케이크");
-	else if(input=="식빵");
-	else if(input=="약식");
-	else if(input=="영양밥");
-	else if(input=="오븐 스파게티");
-	else if(input=="초코칩 쿠키");
-	else if(input=="치즈 케이크");
-	else if(input=="통감자");
-	else if(input=="통닭");
-	else if(input=="통삼겹살");
-	else if(input=="피자");
-	else if(input=="피자토스트");
-	else if(input=="햄버그 스테이크");
-	else if(input=="허니브레드");
+		return TEXT("Tortilla");
+	else if(input=="롤케이크")
+		return TEXT("roll_cake");
+	else if(input=="립 바비큐")
+		return TEXT("barbeque");
+	else if(input=="마늘빵")
+		return TEXT("garlic_bread");
+	else if(input=="베이글")
+		return TEXT("bagle");
+	else if(input=="스콘")
+		return TEXT("scorn");
+	else if(input=="스폰지 케이크")
+		return TEXT("sponge_cake");
+	else if(input=="식빵")
+		return TEXT("bread");
+	else if(input=="약식")
+		return TEXT("sweet_rice");
+	else if(input=="영양밥")
+		return TEXT("deluxe_rice");
+	else if(input=="오븐 스파게티")
+		return TEXT("spaghetti");
+	else if(input=="초코칩 쿠키")
+		return TEXT("chocochip");
+	else if(input=="치즈 케이크")
+		return TEXT("cheese_cake");
+	else if(input=="통감자")
+		return TEXT("potato");
+	else if(input=="통닭")
+		return TEXT("chicken");
+	else if(input=="통삼겹살")
+		return TEXT("pork_belly");
+	else if(input=="피자")
+		return TEXT("pizza");
+	else if(input=="피자토스트")
+		return TEXT("pizza_toast");
+	else if(input=="햄버그 스테이크")
+		return TEXT("hamburger");
+	else if(input=="허니브레드")
+		return TEXT("honey_bread");
 }
