@@ -226,7 +226,7 @@ CString CSelection::Matching_name(CString input)
 	else if(input=="´ëÃß")
 		return TEXT("jujube");
 	else if(input=="µÅÁö°í±â ¸³")
-		return TEXT("pork");
+		return TEXT("pork_rib");
 	else if(input=="¶Ç¶ì¾Æ")
 		return TEXT("Tortilla");
 	else if(input=="¸ã½Ò")

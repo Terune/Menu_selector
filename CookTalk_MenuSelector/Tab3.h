@@ -18,8 +18,22 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 	virtual BOOL OnInitDialog();
+	void ViewNowValue();
+	int returnMaterialNum(CString input);
 	CString ComboName;
 	DECLARE_MESSAGE_MAP()
+	CMap<CString,LPCTSTR,CString,LPCTSTR> slots;
+	CString deny_In_slot;
+	CString deny_In_value;
+	CString inform_In_slot;
+	CString inform_In_value;
+	CString Confirm_In_slot;
+	CString Confirm_In_value;
+
+	CString Slot_input;
+	int Materials[55];
+	int Check_Input[12];
+
 public:
 	CComboBox m_comboDenyList;
 	CComboBox m_comboInformList;
@@ -30,4 +44,24 @@ public:
 	afx_msg void OnBnClickedButton9();
 	afx_msg void OnBnClickedButton6();
 	afx_msg void OnBnClickedButton8();
+	afx_msg void OnBnClickedCheck19();
+	afx_msg void OnBnClickedCheck18();
+	afx_msg void OnBnClickedButton7();
+	afx_msg void OnBnClickedButton12();
+	CComboBox m_ComboConfirmList;
+	CComboBox m_ComboRequestList;
+	afx_msg void OnBnClickedCheck1();
+	afx_msg void OnBnClickedCheck2();
+	afx_msg void OnBnClickedCheck4();
+	afx_msg void OnBnClickedCheck7();
+	afx_msg void OnBnClickedCheck8();
+	afx_msg void OnBnClickedCheck9();
+	afx_msg void OnBnClickedCheck10();
+	afx_msg void OnBnClickedCheck11();
+	afx_msg void OnBnClickedCheck14();
+	afx_msg void OnBnClickedCheck15();
+	afx_msg void OnBnClickedCheck17();
+	afx_msg void OnBnClickedCheck16();
+	afx_msg void OnBnClickedButton13();
+	afx_msg void OnBnClickedButton11();
 };
