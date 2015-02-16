@@ -1,6 +1,7 @@
 #pragma once
 #include "afxwin.h"
 #include "Selection.h"
+#include "Stack.h"
 
 // CTab3 대화 상자입니다.
 
@@ -19,6 +20,14 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 	virtual BOOL OnInitDialog();
 	void ViewNowValue();
+	void Doact(CString act);
+	void Doact(CString act,CString Slot);
+	void Doact(CString act,CString Slot,CString value);
+	void get_bymaterial();
+	void get_bytype();
+	void get_bycon();
+	CString Find_Material(CString language);
+	CString Find_menu();
 	int returnMaterialNum(CString input);
 	CString ComboName;
 	DECLARE_MESSAGE_MAP()
@@ -29,6 +38,8 @@ protected:
 	CString inform_In_value;
 	CString Confirm_In_slot;
 	CString Confirm_In_value;
+	//CString now_act;
+	Stack<CString> now_act;
 
 	CString Slot_input;
 	int Materials[55];
@@ -64,4 +75,5 @@ public:
 	afx_msg void OnBnClickedCheck16();
 	afx_msg void OnBnClickedButton13();
 	afx_msg void OnBnClickedButton11();
+	afx_msg void OnBnClickedButton1();
 };
