@@ -23,6 +23,12 @@ protected:
 	void Doact(CString act);
 	void Doact(CString act,CString Slot);
 	void Doact(CString act,CString Slot,CString value);
+	CString Menu_Con(CString con);
+	CString Menu_Type(CString type);
+	CString Conv_Korean(CString ename);
+	CString Menu_Material(CString menu);
+	//CString impl_confirm(CString slot,CString Value);
+	CString Find_recipe(CString menu,int level);
 	void get_bymaterial();
 	void get_bytype();
 	void get_bycon();
@@ -40,7 +46,10 @@ protected:
 	CString Confirm_In_value;
 	//CString now_act;
 	Stack<CString> now_act;
-
+	Stack<CString> now_slot;
+	Stack<CString> now_value;
+	CString print_act;
+	CString print_DA;
 	CString Slot_input;
 	int Materials[55];
 	int Check_Input[12];
